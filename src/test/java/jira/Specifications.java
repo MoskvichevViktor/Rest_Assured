@@ -12,7 +12,7 @@ public class Specifications {
     //Метод содержит спесификацию для отправки запроса
     public static RequestSpecification requestSpec() {
         return new RequestSpecBuilder()
-                .setBaseUri("https://zil34.atlassian.net")
+                .setBaseUri(EndPoints.BASE_URL)
                 .setContentType(ContentType.JSON)
                 .addHeader("Authorization", Config.getBasicAuthHeaderValue())
                 .setBody(TestData.jsonString)
