@@ -1,32 +1,34 @@
 package jira;
 
 import io.restassured.RestAssured;
+import io.restassured.filter.log.LogDetail;
+import io.restassured.filter.log.ResponseLoggingFilter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class GetFromFluentStyleTests {
 
-    final String BASE_URL = "https://zil34.atlassian.net";
-    final String USER_URL = "/jira/software/projects/HW05/boards/1";
-    final String USER_URL_UNSUC = "/rickandmortyapi.com/api/character";
-
     @BeforeEach
     public void setUp() {
-        RestAssured.baseURI = BASE_URL;
+        RestAssured.baseURI = EndPoints.BASE_URL;
+        if (RestAssured.filters().isEmpty()) {
+            RestAssured.filters(new ResponseLoggingFilter(LogDetail.ALL),
+                    new ResponseLoggingFilter(LogDetail.ALL));
+        }
     }
 
     @Test
     public void statusCode200Test() {
         RestAssured
                 // В given задаем спецификацию отправляемого запроса
-                .given().log().all()
+                .given()
                 // В when отправляем запрос и получаем ответ
                 .when()
                     // Отправка HTTP запроса GET
-                    .get(USER_URL)
+                    .get(EndPoints.USER_URL)
                 // В then задаем спецификацию получаемого ответа (проверка)
                 // Статус, заголовки, тело ответа и т д
-                .then().log().all()
+                .then()
                     // Проверка кода статуса ответа
                     .statusCode(200);
     }
@@ -35,13 +37,13 @@ public class GetFromFluentStyleTests {
     public void statusCode404Test() {
         RestAssured
                 // В given задаем спецификацию отправляемого запроса
-                .given().log().all()
+                .given()
                 // В expect задаем спецификацию получаемого ответа (проверка)
                 // Статус, заголовки, тело ответа и т д
-                .expect().log().all()
+                .expect()
                     .statusCode(404)
                 // В when отправляем запрос и получаем ответ
                 .when()
-                    .get(USER_URL_UNSUC);
+                    .get(EndPoints.USER_URL_UNSUC);
     }
 }

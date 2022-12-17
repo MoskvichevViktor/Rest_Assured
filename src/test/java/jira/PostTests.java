@@ -8,14 +8,14 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+
 public class PostTests extends BaseTest{
 
-    //private final String BASE_URL = "https://zil34.atlassian.net";
-    private final String NEW_ISSUE_URL = "/rest/api/3/issue";
-    private final String NEW_ISSUE_URL_UNSUC = "/rest/api/issue";
-
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws FileNotFoundException {
         if (RestAssured.filters().isEmpty()) {
             RestAssured.filters(new ResponseLoggingFilter(LogDetail.ALL),
                     new ResponseLoggingFilter(LogDetail.ALL));
@@ -28,7 +28,7 @@ public class PostTests extends BaseTest{
         Specifications.installSpecification(Specifications.requestSpec(), Specifications.responseSpec());
         // Response - класс, хранящий ответ запроса
         // Отправка запроса POST
-        Response response = RestAssured.post(NEW_ISSUE_URL);
+        Response response = RestAssured.post(EndPoints.NEW_ISSUE_URL);
         // Проверка кода статуса ответа
         response.then().statusCode(201);
     }
@@ -40,7 +40,7 @@ public class PostTests extends BaseTest{
         // Response - класс, хранящий ответ запроса
         // Отправка HTTP запроса POST
         // Передадим не верный URL
-        Response response = RestAssured.post(NEW_ISSUE_URL_UNSUC);
+        Response response = RestAssured.post(EndPoints.NEW_ISSUE_URL_UNSUC);
         // Проверка кода статуса ответа
         response.then().statusCode(404);
     }
@@ -51,7 +51,7 @@ public class PostTests extends BaseTest{
         Specifications.installSpecification(Specifications.requestSpec(), Specifications.responseSpec());
         // Response - класс, хранящий ответ запроса
         // Отправка HTTP запроса POST
-        Response response = RestAssured.post(NEW_ISSUE_URL);
+        Response response = RestAssured.post(EndPoints.NEW_ISSUE_URL);
         // Проверка кода статуса ответа
         response.then().contentType(ContentType.JSON);
     }
